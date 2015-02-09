@@ -169,7 +169,7 @@ echo (new Circle)->getArea(); //Will work now
 
 ////////////////////////////////////////////////////////////////
 
-// Messages
+// Messages/Autoloading
 
 /* Business hires person, person part of staff, exmaple of classes interacting with one another--sending "messages: to one another */
 
@@ -235,5 +235,119 @@ $laracasts = new Business($staff); //The staff portion of Business is a "depende
 $laracasts->hire($sloane);
 
 //After this staff should have one person inside of it
+
+//Autoloading Example
+
+require ('src/filename.php'); //Not good
+
+require ('vendor/autoload.php') //Supes good
+
+//Use composer instead, good for autloading
+
+/* {
+
+    "autoload": {
+    
+        "psr-4": { //Standard that specifies how the file will be autoloaded
+            "Acme\\": "src/blah.php" --> Namespace is "Acme"
+        
+        }
+    }
+
+
+}
+
+namespace Acme; //Cateogrizes php files for autoloading */
+    
+$sloane = new Person('Sloane'); //instead of this
+
+$sloane = new Acme\Person('Sloane'); //better
+
+//if you
+
+use Acme\Person;
+
+//you don't have to 
+
+$sloane = new Acme\Person('Sloane');
+
+//you can remove the "acme" and
+
+$sloane = new Person('Sloane'); 
+
+////////////////////////////////////////////////////////////////
+
+//Statics and Constants
+
+/* Most of the time, statics are NOT the right choice. They should be used for simple operations that are never going to change. */
+
+class Math {
+
+    public static function add(...$nums) { //Most of the time, statics are bad
+    
+        return array_sum(func_get_args($nums)); //If this method starts interacting with other parts, everything breaks
+        
+    }
+
+}
+
+//Without static
+
+$math = new Math;
+
+var_dump($math->add(1,2,3,4));
+
+//With a static
+
+echo Math::add(1,2,3); //in this case, this is okay because we're just adding numbers
+
+
+
+class Person {
+
+    public static $age = 1; //So wrong
+
+}
+
+Person::$age; //But does this make sense? No.
+
+//Another example
+
+class Person {
+
+    public static $age = 1;
+    
+    public funtion haveBirthday() {
+    
+        static::$age += 1;
+    
+    }
+
+}
+
+$joe = new Person;
+
+$joe->haveBirthday();
+
+echo Person::$age; //Seems okay, but....
+
+$jane = new Person;
+$jane->haveBirthday();
+
+echo Person::$age; //Will output 4, because the age variable is SHARED. It should be instanced, not global (encapsulated within the class and specific to each person)
+
+
+
+//Constant example
+
+class BankAccount {
+
+    const TAX = .09; //Saying that this will NEVER be changed or manipulated
+
+}
+
+
+echo BankAccount::TAX;
+    
 
 ?>
