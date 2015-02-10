@@ -348,6 +348,186 @@ class BankAccount {
 
 
 echo BankAccount::TAX;
+
+
+////////////////////////////////////////////////////////////////
+
+//Interfaces and Implementation
+
+/* An interface is a type of contract. If there are ever classes or tasks that have multiple ways of executing, then you should create an interface. */
+
+//Example 1
+
+interface Animal { 
+
+    public function communication(); //Forces all classes to use this function
     
+}
+
+class Dog implements Animal {
+
+    public function communicate() {
+    
+        return "Bark";
+    
+    }
+    
+}
+
+class Cat implements Animal {
+
+    public function communicate() {
+    
+        return "Meow";
+    
+    }
+    
+}
+
+
+//Example 2
+
+
+interface logger {  
+    
+    public function execute($message);
+    
+}
+
+
+class LogToFile implements Logger {
+
+    public function execute($message) {
+    
+        var_dump('Log the message to a file');
+    
+    }
+
+}
+
+
+class LogToDatabase implements Logger {
+
+    public function execute($message) {
+    
+        var_dump('Log the message to a database');
+    
+    }
+
+}
+
+// ....
+
+
+class UsersController { //You don't need to change this class at all to use other funcitonalities 
+    
+    protected $logger;
+    
+    public function __construct(Logger $logger) { //Instead of specific class/function--now saying, hey in order for me to work, i need to have some kind of functionality, but it doesn't have to be specific.
+        
+        $this->logger = $logger;
+    
+    }
+
+    public function show() {
+    
+        $user = "JohnDoe";
+        
+        //log this info
+        
+        $this->logger->execute($user);
+    
+    }
+
+}
+
+$controller = new UsersController(new LogToFile);
+
+$controller = new UsersController(new LogToDatabase);
+
+$controller->show();
+
+
+//Example 3
+
+interface CastsToJson {
+
+    public function toJson();
+    
+}
+
+class User implements CastsToJson {}
+
+class Collection implements CastsToJson {}
+
+
+
+//Example 4 
+
+
+interface Repository {
+
+    public function save($data);
+    
+}
+
+
+class MongoRepository {
+    
+    public function save($data) {
+    
+    
+    
+    }
+
+
+}
+
+class FileRepository {
+    
+    public function save($data) {
+    
+    
+    
+    }
+
+
+}
+
+
+
+//Example 5
+
+interface CanBeFiltered {
+
+    public function filter();
+
+}
+
+
+class filterByDate implements CanBeFiltered {
+
+    protected $data;
+    
+    public function filter($data) {
+    
+        //Filters data and stuff
+    
+    }
+
+}
+
+class filterByFave implements CanBeFiltered {
+
+    protected $data;
+    
+    public function filter($data) {
+    
+        //Filters data and stuff
+    
+    }
+
+}
+
 
 ?>
