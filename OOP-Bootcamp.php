@@ -530,4 +530,33 @@ class filterByFave implements CanBeFiltered {
 }
 
 
+///////////////////////////////////////////
+
+//Abstract classes vs. interfaces
+
+interface Provider {
+    
+    public function authorize();
+
+}
+    
+function login(GithubProvider $provider) {
+
+    $provider->authorize(); //Great until you need to use another form of login validation
+    
+    //You could do an if else
+    
+    if ($provider) 
+        $provider->authorize();
+    
+} 
+
+//It's better to do this
+
+function login(Provider $provider) {
+
+    $provider->authorize(); //This is an example of polymorphism
+    
+}
+
 ?>
